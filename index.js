@@ -27,13 +27,26 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
 
     const db = client.db('movie-db')
-    const movieCollection = db.collection('moviesCollection')
+    const movieCollection = db.collection('movie')
 
 
     app.get('/movies', async(req,res)=>{
         const result = await movieCollection.find().toArray()
          res.send(result);
      })
+
+     app.get('/rate', async (req, res) => {
+			const cursor = movieCollection.find().sort({ rating: -1 }).limit(5)
+			const result = await cursor.toArray()
+			res.send(result)
+		})
+
+
+        app.get('/recent', async (req, res) => {
+			const cursor = movieCollection.find().sort({ addedAt: -1 }).limit(5)
+			const result = await cursor.toArray()
+			res.send(result)
+		})
 
 
     await client.connect();
