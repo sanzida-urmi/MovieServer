@@ -37,18 +37,67 @@ async function run() {
 
 
 app.get("/movies/my-collection", async(req,res)=>{
+  
       const email = req.query.email;
       const result = await movieCollection.find({addedBy: email}).toArray()
       res.send(result);
     })
 
     app.get('/movies', async(req,res)=>{
+
+
+
+
+  //     try {
+  //   const { minRating, maxRating, genres } = req.query;
+  //   const filter = {};
+
+  //   // Rating Range Filter ($gte, $lte)
+  //   if (minRating || maxRating) {
+  //     filter.rating = {};
+  //     if (minRating) filter.rating.$gte = parseFloat(minRating);
+  //     if (maxRating) filter.rating.$lte = parseFloat(maxRating);
+  //   }
+
+  //   // Multiple Genres Filter ($in operator)
+  //   if (genres) {
+  //     const genreArray = genres.split(',');
+  //     filter.genre = { $in: genreArray };
+  //   }
+
+  //   console.log("Applied Filters:", filter);
+    
+  //   const movies = await movieCollection.find(filter).toArray();
+  //   res.send(movies);
+    
+  // } catch (error) {
+  //   console.error("Error fetching movies:", error);
+  //   res.status(500).send({ error: "Internal server error" });
+  // }
+
+
+
+
         const result = await movieCollection.find().toArray()
          res.send(result);
      })
 
 
-     
+    //  genre 
+
+ 
+  app.get("/genre", async(req,res)=>{
+    const {genres} = req.query;
+
+    if(genres){
+      const genary = genres.split(',');
+      const filter = {genre: {$in: genary }};
+
+      const movies = await movieCollection.find(filter).toArray();
+      res.send(movies);
+    }
+  })
+
     app.get('/movies/:id', async(req,res) =>{
       const {id} = req.params
       console.log(id);
