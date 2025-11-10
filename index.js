@@ -32,6 +32,7 @@ async function run() {
     const db = client.db('movie-db')
     const movieCollection = db.collection('movie')
     const usersCollection = db.collection('users')
+    const watchCollection = db.collection('watchlist')
 
 
 
@@ -107,6 +108,19 @@ app.get("/movies/my-collection", async(req,res)=>{
       res.send({totalUsers: count});
     });
 
+
+
+    // watchlist 
+app.post('/watch', async(req,res)=>{
+      const data = req.body
+      // console.log(data);
+      const result = await watchCollection.insertOne(data);
+
+      res.send({
+        success: true,
+        result
+      })
+    })
 
     // add movie 
 
