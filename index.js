@@ -80,7 +80,10 @@ async function run() {
 			}
 		})
 
-  
+    app.get('/users/count', async(req,res)=>{
+      const count = await usersCollection.countDocuments();
+      res.send({totalUsers: count});
+    });
     
 
 
