@@ -61,7 +61,17 @@ app.get("/movies/my-collection", async(req,res)=>{
     })
 
 
-    
+    app.get('/movies/update/:id', async(req,res) =>{
+      const {id} = req.params
+      console.log(id);
+
+      const result = await movieCollection.findOne({_id: new ObjectId(id)})
+
+      res.send({
+        success: true,
+        result
+      })
+    })
 
 
      app.get('/rate', async (req, res) => {
