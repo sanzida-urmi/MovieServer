@@ -122,6 +122,15 @@ app.post('/watch', async(req,res)=>{
       })
     })
 
+
+    app.get("/watch", async(req,res)=>{
+      const email = req.query.email;
+      const result = await watchCollection.find({addedBy: email}).toArray()
+      res.send(result);
+    })
+
+
+
     // add movie 
 
     app.post('/movies', async(req,res)=>{
