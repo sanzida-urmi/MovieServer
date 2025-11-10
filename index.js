@@ -84,6 +84,21 @@ async function run() {
       const count = await usersCollection.countDocuments();
       res.send({totalUsers: count});
     });
+
+
+    // add movie 
+
+    app.post('/movies', async(req,res)=>{
+      const data = req.body
+      // console.log(data);
+      const result = await movieCollection.insertOne(data);
+
+      res.send({
+        success: true,
+        result
+      })
+    })
+
     
 
 
