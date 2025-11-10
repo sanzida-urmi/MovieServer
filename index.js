@@ -25,12 +25,21 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+
+    await client.connect();
     // Connect the client to the server	(optional starting in v4.7)
 
     const db = client.db('movie-db')
     const movieCollection = db.collection('movie')
     const usersCollection = db.collection('users')
 
+
+
+app.get("/movies/my-collection", async(req,res)=>{
+      const email = req.query.email;
+      const result = await movieCollection.find({addedBy: email}).toArray()
+      res.send(result);
+    })
 
     app.get('/movies', async(req,res)=>{
         const result = await movieCollection.find().toArray()
@@ -50,6 +59,9 @@ async function run() {
         result
       })
     })
+
+
+    
 
 
      app.get('/rate', async (req, res) => {
@@ -99,10 +111,19 @@ async function run() {
       })
     })
 
+
+
     
 
 
-    await client.connect();
+
+
+
+
+    
+
+
+    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
