@@ -122,16 +122,37 @@ app.get("/movies/my-collection", async(req,res)=>{
     })
 
 
+    // put 
+    app.put('/movies/update/:id', async(req,res)=>{
+      const {id} = req.params
+      const data = req.body;
+      console.log(data);
+      console.log(id);
 
-    
+      const newId = new ObjectId(id);
+      const filter = {_id: newId}
+      const update = {
+        $set: data
+      }
 
+      const result = await movieCollection.updateOne(filter,update)
 
+      res.send({
+        success: true
+      })
+    })
 
+  
+     // delete 
 
+    app.delete('/movies/:id', async(req,res)=>{
+      const {id} = req.params
+      const result = await movieCollection.deleteOne({_id: new ObjectId(id)})
 
-
-    
-
+      res.send({
+        success: true
+      })
+    })
 
     
     // Send a ping to confirm a successful connection
