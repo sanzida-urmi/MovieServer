@@ -1,7 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config()
 const express = require('express')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
 
 const app = express()
 const cors = require('cors');
@@ -30,12 +29,28 @@ async function run() {
 
     const db = client.db('movie-db')
     const movieCollection = db.collection('movie')
+    const usersCollection = db.collection('users')
 
 
     app.get('/movies', async(req,res)=>{
         const result = await movieCollection.find().toArray()
          res.send(result);
      })
+
+
+     
+    app.get('/movies/:id', async(req,res) =>{
+      const {id} = req.params
+      console.log(id);
+
+      const result = await movieCollection.findOne({_id: new ObjectId(id)})
+
+      res.send({
+        success: true,
+        result
+      })
+    })
+
 
      app.get('/rate', async (req, res) => {
 			const cursor = movieCollection.find().sort({ rating: -1 }).limit(5)
@@ -49,6 +64,24 @@ async function run() {
 			const result = await cursor.toArray()
 			res.send(result)
 		})
+
+    // user 
+    app.post('/users', async (req, res) => {
+			const newUser = req.body
+
+			const email = req.body.email
+			const query = { email: email }
+			const existinguser = await usersCollection.findOne(query)
+			if (existinguser) {
+				res.send('already exits')
+			} else {
+				const result = await usersCollection.insertOne(newUser)
+				res.send(result)
+			}
+		})
+
+  
+    
 
 
     await client.connect();
