@@ -98,6 +98,25 @@ app.get("/movies/my-collection", async(req,res)=>{
     }
   })
 
+  // rating 
+  app.get("/rating", async(req,res)=>{
+    try{
+      const min = parseFloat(req.query.min);
+      const max = parseFloat(req.query.max);
+
+      let query ={};
+
+      if(!isNaN(min) && !isNaN(max)){
+        query.rating={$gte: min, $lte: max};
+      }
+      const result = await movieCollection.find(query).toArray();
+      res.send(result);
+    } catch(err) {
+      console.error(err);
+      res.status(500).send({message: "server error"});
+    }
+  });
+  
     app.get('/movies/:id', async(req,res) =>{
       const {id} = req.params
       console.log(id);
