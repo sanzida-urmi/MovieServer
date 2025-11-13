@@ -26,8 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
 
-    await client.connect();
-    // Connect the client to the server	(optional starting in v4.7)
+    // await client.connect();
 
     const db = client.db('movie-db')
     const movieCollection = db.collection('movie')
@@ -44,37 +43,6 @@ app.get("/movies/my-collection", async(req,res)=>{
     })
 
     app.get('/movies', async(req,res)=>{
-
-
-
-
-  //     try {
-  //   const { minRating, maxRating, genres } = req.query;
-  //   const filter = {};
-
-  //   // Rating Range Filter ($gte, $lte)
-  //   if (minRating || maxRating) {
-  //     filter.rating = {};
-  //     if (minRating) filter.rating.$gte = parseFloat(minRating);
-  //     if (maxRating) filter.rating.$lte = parseFloat(maxRating);
-  //   }
-
-  //   // Multiple Genres Filter ($in operator)
-  //   if (genres) {
-  //     const genreArray = genres.split(',');
-  //     filter.genre = { $in: genreArray };
-  //   }
-
-  //   console.log("Applied Filters:", filter);
-    
-  //   const movies = await movieCollection.find(filter).toArray();
-  //   res.send(movies);
-    
-  // } catch (error) {
-  //   console.error("Error fetching movies:", error);
-  //   res.status(500).send({ error: "Internal server error" });
-  // }
-
 
 
 
@@ -151,7 +119,7 @@ app.get("/movies/my-collection", async(req,res)=>{
 
 
         app.get('/recent', async (req, res) => {
-			const cursor = movieCollection.find().sort({ addedAt: -1 }).limit(5)
+			const cursor = movieCollection.find().sort({ addedAt: -1 }).limit(6)
 			const result = await cursor.toArray()
 			res.send(result)
 		})
@@ -247,10 +215,9 @@ app.post('/watch', async(req,res)=>{
 
     
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
     // await client.close();
   }
 }
